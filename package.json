@@ -1,0 +1,19 @@
+{
+  "name": "advent-of-code-2021",
+  "version": "1.0.0",
+  "description": "Solutions for the 2021 Advent of Code",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ruegerj/aoc-2021.git"
+  },
+  "keywords": [],
+  "private": true,
+  "author": "rugerj1",
+  "license": "cc0-1.0",
+  "bugs": {
+    "url": "https://github.com/ruegerj/aoc-2021/issues"
+  },
+  "homepage": "https://github.com/ruegerj/aoc-2021"
+}

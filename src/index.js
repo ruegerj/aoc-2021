@@ -1,6 +1,6 @@
 import minimist from 'minimist';
-import { run } from './common/day-runner.js';
-import { printWarning } from './common/printer.js';
+import { run } from './common/challenge.js';
+import { printWarning } from './common/print.js';
 
 // Parse cli args
 const args = minimist(process.argv.slice(2), {

@@ -1,8 +1,8 @@
 import { exec } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import ora from 'ora';
-import { entryFilePath, codeDirPath } from './path-resolver.js';
-import { printResult, printTimeLabel, printWarning } from './printer.js';
+import { entryFilePath, codeDirPath } from './path.js';
+import { printResult, printTimeLabel, printWarning } from './print.js';
 
 /**
  * Executes the code of the day with the given number
@@ -53,7 +53,7 @@ export function run(day, challenge = 1) {
  * @param {number} challenge Number of the challenge of the given day, defaults to 1
  * @returns {boolean} If the entry-file for the given day and challenge exists
  */
-export function checkIfDayExists(day, challenge = 1) {
+function checkIfDayExists(day, challenge = 1) {
 	const path = entryFilePath(day, challenge);
 
 	return existsSync(path);

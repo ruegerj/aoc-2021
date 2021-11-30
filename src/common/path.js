@@ -27,5 +27,14 @@ export function entryFilePath(day, challenge) {
  * @returns {string} Path of the directory holding the assets of the given day
  */
 export function assetsDirPath(day) {
-	return join(cwd(), 'assets', `${DAY_PREFIX}-${day}`);
+	return join(cwd(), '..', '..', 'assets', `${DAY_PREFIX}-${day}`);
+}
+
+/**
+ * Resolves the name of the input file for the given challenge
+ * @param {number} challenge Number of the challenge whose input file name should be resolved
+ * @returns {string} Name of the input file for the given challenge
+ */
+export function inputFileName(challenge) {
+	return `${CHALLENGE_PREFIX}-${challenge}.input.txt`;
 }

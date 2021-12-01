@@ -6,14 +6,17 @@ import { assetsDirPath, inputFileName } from './path.js';
 /**
  * Loads the content of the input file for the corresponding day and challenge.
  * Day and challenge number will be resolved based on the path of the caller file
+ * @param {number | undefined} challenge Optional challenge number
  * @returns {string | undefined} Content of file or `undefined` if not found
  */
-export function loadInput() {
+export function loadInput(challenge = undefined) {
 	const challengeRegexp = /challenge-(\d).*/;
 
-	// Get challenge number from caller file name
-	const challengeFile = basename(getCallerFile());
-	const challenge = +challengeFile.match(challengeRegexp)[1];
+	if (isNaN(challenge)) {
+		// Get challenge number from caller file name
+		const challengeFile = basename(getCallerFile());
+		challenge = +challengeFile.match(challengeRegexp)[1];
+	}
 
 	const inputFile = inputFileName(challenge);
 

@@ -1,32 +1,11 @@
 import { loadInput } from '../common/input.js';
+import { getColumns, getScore, hasWon, parseBingo } from './utils.js';
 
 const input = loadInput()
 	.split('\n')
 	.map((l) => l.trim());
 
-const [numberInput] = input.splice(0, 2);
-const numbersToDraw = numberInput.split(',').map((n) => +n);
-
-const boards = [];
-let board = [];
-
-for (let i = 0; i < input.length; i++) {
-	const line = input[i];
-
-	if (!line || i == input.length - 1) {
-		boards.push(board);
-		board = [];
-
-		continue;
-	}
-
-	const row = line
-		.split(' ')
-		.filter((n) => n)
-		.map((n) => +n);
-
-	board.push(row);
-}
+const [numbersToDraw, boards] = parseBingo(input);
 
 let winningBoard;
 let winningNumber;
@@ -37,21 +16,14 @@ while (numbersToDraw.length > 0) {
 	drawnNumbers.set(drawnNumber);
 
 	for (const board of boards) {
-		const columns = [];
-		for (let i = 0; i < boards.length; i++) {
-			columns.push(board.map((row) => row[i]));
+		const won = hasWon(board, drawnNumbers);
+
+		if (!won) {
+			continue;
 		}
 
-		const numberCheck = (numbers) =>
-			numbers.every((num) => drawnNumbers.has(num));
-
-		const hasWinningRow = board.filter(numberCheck).length > 0;
-		const hasWinningCol = columns.filter(numberCheck).length > 0;
-
-		if (hasWinningRow || hasWinningCol) {
-			winningBoard = board;
-			break;
-		}
+		winningBoard = board;
+		break;
 	}
 
 	if (winningBoard) {
@@ -60,23 +32,7 @@ while (numbersToDraw.length > 0) {
 	}
 }
 
-let unmarkedNumbers = [];
-
-for (let i = 0; i < winningBoard.length; i++) {
-	const row = winningBoard[i];
-
-	for (let j = 0; j < row.length; j++) {
-		const number = row[j];
-
-		if (drawnNumbers.has(number)) {
-			continue;
-		}
-
-		unmarkedNumbers.push(number);
-	}
-}
-
-const unmarkedNumberSum = unmarkedNumbers.reduce((acc, cur) => (acc += cur), 0);
-const score = unmarkedNumberSum * winningNumber;
+const boardScore = getScore(winningBoard, drawnNumbers);
+const score = boardScore * winningNumber;
 
 console.log(score);

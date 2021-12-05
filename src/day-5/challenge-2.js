@@ -1,16 +1,16 @@
 import { loadInput } from '../common/input.js';
 import {
+	calculateGridDimension,
 	countOverlappingPoints,
 	createGrid,
-	calculateGridDimension,
 	parsePoints,
 } from './utils.js';
 
-const input = loadInput()
+const input = loadInput(1)
 	.split('\n')
 	.map((l) => l.trim());
 
-const coveredPoints = parsePoints(input);
+const coveredPoints = parsePoints(input, true);
 
 const { width, height } = calculateGridDimension(coveredPoints);
 

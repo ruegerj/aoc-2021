@@ -1,7 +1,12 @@
 import { loadInput } from '../common/input.js';
-import { getDifference, getMaxValue, parsePositions } from './utils.js';
+import {
+	getDifference,
+	factorialSum,
+	getMaxValue,
+	parsePositions,
+} from './utils.js';
 
-const input = loadInput();
+const input = loadInput(1);
 
 const crabPositions = parsePositions(input);
 
@@ -16,7 +21,7 @@ for (let i = minPos; i <= maxPos; i++) {
 	const fuelCost = crabPositions.reduce((cost, position) => {
 		const difference = getDifference(position, i);
 
-		cost += difference;
+		cost += factorialSum(difference);
 
 		return cost;
 	}, 0);
@@ -24,8 +29,8 @@ for (let i = minPos; i <= maxPos; i++) {
 	fuelCostMap.set(i, fuelCost);
 }
 
-const sortedEntries = Array.from(fuelCostMap.values()).sort((a, b) => a - b);
+const sortedValues = Array.from(fuelCostMap.values()).sort((a, b) => a - b);
 
-const minimalFuelRequired = sortedEntries.shift();
+const minimalFuelRequired = sortedValues.shift();
 
 console.log(minimalFuelRequired);

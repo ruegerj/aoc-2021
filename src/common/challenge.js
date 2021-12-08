@@ -34,6 +34,7 @@ export function run(day, challenge = 1) {
 		(err, stdout, stderr) => {
 			if (err) {
 				spinner.fail('Something went wrong...');
+				console.log(stdout);
 				console.error(stderr);
 				return;
 			}

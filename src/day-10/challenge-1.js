@@ -1,15 +1,9 @@
 import { loadInput } from '../common/input.js';
+import { openingTagMap, isOpeningTag } from './utils.js';
 
 const input = loadInput();
 
 const codeLines = input.split('\n').map((l) => l.trim());
-
-const openingTagMap = new Map([
-	['>', '<'],
-	[']', '['],
-	['}', '{'],
-	[')', '('],
-]);
 
 const illegalCharacters = [];
 
@@ -33,17 +27,11 @@ for (const line of codeLines) {
 	}
 }
 
-const score = calculateSyntaxErrorScore(illegalCharacters);
+const score = calculateScore(illegalCharacters);
 
 console.log(score);
 
-function isOpeningTag(char) {
-	const openingTags = ['<', '[', '{', '('];
-
-	return openingTags.includes(char);
-}
-
-function calculateSyntaxErrorScore(characters) {
+function calculateScore(characters) {
 	const characterPointMap = new Map([
 		[')', 3],
 		[']', 57],

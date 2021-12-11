@@ -1,14 +1,15 @@
 import { loadInput } from '../common/input.js';
 import { parseOctopusGrid } from './utils.js';
 
-const input = loadInput();
+const input = loadInput(1);
 const octopusGrid = parseOctopusGrid(input);
 
-const steps = 100;
-let flashCounter = 0;
+let stepCounter = 0;
+let simultaneousFlash = false;
 
-for (let i = 0; i < steps; i++) {
+while (!simultaneousFlash) {
 	let flashedOctopuses = [];
+	stepCounter++;
 
 	for (const row of octopusGrid) {
 		for (const octopus of row) {
@@ -24,7 +25,7 @@ for (let i = 0; i < steps; i++) {
 		flashedOctopuses = octopus.flash(octopusGrid, flashedOctopuses);
 	}
 
-	flashCounter += flashedOctopuses.length;
+	simultaneousFlash = octopusGrid.flat().every((o) => o.lightLevel == 0);
 }
 
-console.log(flashCounter);
+console.log(stepCounter);

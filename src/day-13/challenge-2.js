@@ -1,14 +1,14 @@
 import { loadInput } from '../common/input.js';
 import { parseInstructions, parsePoints } from './utils.js';
 
-const input = loadInput();
+const input = loadInput(1);
 const lines = input.split('\n').map((l) => l.trim());
 
 const points = parsePoints(lines.splice(0, lines.indexOf('')));
 const instructions = parseInstructions(lines.filter((l) => l));
 
-for (const { axis, value } of [instructions[0]]) {
-	const affectedPoints = points.filter((p) => p[axis] < value);
+for (const { axis, value } of instructions) {
+	const affectedPoints = points.filter((p) => p[axis] > value);
 
 	for (const point of affectedPoints) {
 		const offset = value - point[axis];
@@ -27,6 +27,25 @@ for (const { axis, value } of [instructions[0]]) {
 	}
 }
 
-const visibleDots = points.length;
+const rowMap = points.reduce((map, point) => {
+	const row = map.get(point.y) ?? [];
+	row[point.x] = '[]';
+	map.set(point.y, row);
 
-console.log(visibleDots);
+	return map;
+}, new Map());
+
+const sortedRows = Array.from(rowMap.keys())
+	.sort((a, b) => a - b)
+	.map((y) => rowMap.get(y));
+
+for (const row of sortedRows) {
+	let line = '';
+
+	for (const point of row) {
+		const char = point ?? '  ';
+		line += char;
+	}
+
+	console.log(line);
+}

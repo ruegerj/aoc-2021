@@ -6,6 +6,13 @@ export class CaveSystem {
 		tunnels.forEach((t) => this.addTunnel(...t));
 	}
 
+	static parse(input) {
+		const tunnels = input.split('\n').map((l) => l.trim().split('-'));
+		const caves = new Set(tunnels.flat());
+
+		return new CaveSystem(caves, tunnels);
+	}
+
 	addCave(cave) {
 		this.system.set(cave, []);
 	}
@@ -18,11 +25,33 @@ export class CaveSystem {
 	get(cave) {
 		return this.system.get(cave);
 	}
-}
 
-export function parseCaveSystem(input) {
-	const tunnels = input.split('\n').map((l) => l.trim().split('-'));
-	const caves = new Set(tunnels.flat());
+	searchAvailablePaths(from, to, canBeVisited, visited = [], paths = []) {
+		if (from === to) {
+			paths.push([...visited]);
+			return paths;
+		}
 
-	return new CaveSystem(caves, tunnels);
+		visited.push(from);
+
+		const adjacentCaves = this.get(from);
+
+		for (const cave of adjacentCaves) {
+			const skipCave = !canBeVisited(cave, visited);
+
+			if (skipCave) {
+				continue;
+			}
+
+			paths = this.searchAvailablePaths(
+				cave,
+				to,
+				canBeVisited,
+				[...visited],
+				paths,
+			);
+		}
+
+		return paths;
+	}
 }

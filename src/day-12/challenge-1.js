@@ -1,52 +1,23 @@
 import { loadInput } from '../common/input.js';
-import { parseCaveSystem } from './utils.js';
+import { CaveSystem } from './utils.js';
 
 const input = loadInput();
-const caveSystem = parseCaveSystem(input);
+const caveSystem = CaveSystem.parse(input);
 
-let pointer = 0;
+const canBeVisited = (cave, path) => {
+	const isBigCave = cave == cave.toUpperCase();
 
-const foundPaths = searchAvailablePaths('start', 'end');
+	if (isBigCave || cave == 'end') {
+		return true;
+	}
+
+	return !path.includes(cave);
+};
+
+const foundPaths = caveSystem.searchAvailablePaths(
+	'start',
+	'end',
+	canBeVisited,
+);
 
 console.log(foundPaths.length);
-
-function searchAvailablePaths(from, to, visited = new Set(), paths = []) {
-	const destinations = caveSystem.get(from);
-
-	if (from == to) {
-		const path = paths[pointer];
-		paths.push([...path]);
-		pointer += 1;
-
-		return paths;
-	}
-
-	visited.add(from);
-
-	for (const destination of destinations) {
-		const skipDestination =
-			visited.has(destination) && !canBeVisitedMultipleTimes(destination);
-
-		if (skipDestination) {
-			continue;
-		}
-
-		if (!paths[pointer]) {
-			paths[pointer] = [];
-		}
-
-		paths[pointer].push(destination);
-
-		paths = searchAvailablePaths(destination, to, visited, paths);
-
-		paths[pointer].splice(paths[pointer].indexOf(destination), 1);
-	}
-
-	visited.delete(from);
-
-	return paths.filter((p) => p.length);
-}
-
-function canBeVisitedMultipleTimes(cave) {
-	return cave == cave.toUpperCase() || cave == 'end';
-}

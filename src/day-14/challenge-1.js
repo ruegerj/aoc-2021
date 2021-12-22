@@ -1,28 +1,21 @@
 import { loadInput } from '../common/input.js';
+import { parseInput } from './utils.js';
 
 const input = loadInput();
-const lines = input.split('\n').map((l) => l.trim());
-
-let polymer = lines.splice(0, 2).shift();
-const insertionRules = lines.map((l) => {
-	const [matcher, element] = l.split(' -> ');
-	return {
-		matcher,
-		element,
-	};
-});
+const [polymer, insertionRules] = parseInput(input);
 
 const steps = 10;
+let polymerElements = polymer.split('');
 
 for (let i = 0; i < steps; i++) {
 	let insertions = [];
 
-	for (const { matcher, element } of insertionRules) {
+	for (const [matcher, element] of insertionRules) {
 		let matcherRegexpSource = `(?=(${matcher}{1}))`;
 
 		const matcherRegexp = new RegExp(matcherRegexpSource, 'g');
 
-		const matches = polymer.matchAll(matcherRegexp);
+		const matches = polymerElements.join('').matchAll(matcherRegexp);
 
 		for (const { index } of matches) {
 			insertions.push({
@@ -35,21 +28,16 @@ for (let i = 0; i < steps; i++) {
 
 	insertions = insertions.sort((a, b) => a.insertAt - b.insertAt);
 
-	const polymerElements = polymer.split('');
-
 	for (let i = 0; i < insertions.length; i++) {
 		const { insertAt, element } = insertions[i];
 
 		polymerElements.splice(insertAt + i, 0, element);
 	}
-
-	polymer = polymerElements.join('');
 }
 
 const elementCounter = new Map();
-const elements = polymer.split('');
 
-for (const element of elements) {
+for (const element of polymerElements) {
 	const count = elementCounter.get(element) || 0;
 	elementCounter.set(element, count + 1);
 }
